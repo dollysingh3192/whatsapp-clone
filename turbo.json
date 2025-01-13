@@ -3,7 +3,7 @@
   "tasks": {
     "build": {
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", "^generate"],
       "outputs": [
         "build/**",
         ".vercel/**",
@@ -23,9 +23,12 @@
       "dependsOn": ["^build"]
     },
     "dev": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", "^generate"],
       "cache": false,
       "persistent": true
+    },
+    "generate": {
+      "dependsOn": ["^generate"]
     },
     "clean": {
       "cache": false
