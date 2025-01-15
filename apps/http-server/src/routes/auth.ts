@@ -3,37 +3,45 @@ import { prisma } from '@repo/database';  // Import the Prisma singleton instanc
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { secret } from "../constants";
-import { userSchema } from "@repo/common/types";
+import { createUserShema, signinUserShema } from "@repo/common/types";
 
 const auth = express.Router();
 
 auth.post("/signin", async (req, res) => {
-    // const { password, email } = req.body;
+    const parsedData = signinUserShema.safeParse(req.body);
+    if (!parsedData.success) {
+        res.json({
+            message: parsedData.error
+        })
+        return;
+    }
 
-    // //Find the user in the database
-    // const data = await prisma.user.findUnique({
-    //     where: {
-    //         email: email
-    //     }
-    // });
+    const { email, password } = parsedData.data;
 
-    // if (!data) {
-    //     return res.status(400).json({ message: 'Invalid credentials' });
-    // }
+    //Find the user in the database
+    const data = await prisma.user.findUnique({
+        where: {
+            email: email
+        }
+    });
 
-    // const isPasswordValid = await bcrypt.compare(password, data.password);
-    // if (!isPasswordValid) {
-    //     return res.status(400).json({ message: 'Invalid credentials' });
-    // }
+    if (!data) {
+        return res.status(400).json({ message: 'Invalid credentials' });
+    }
 
-    // const token = jwt.sign({ id: data.id }, secret);
+    const isPasswordValid = await bcrypt.compare(password, data.password);
+    if (!isPasswordValid) {
+        return res.status(400).json({ message: 'Invalid credentials' });
+    }
 
-    // res.status(200).json({ token, user: { username: data.username, email: data.email } });
+    const token = jwt.sign({ id: data.id }, secret);
+
+    res.status(200).json({ token });
 });
 
 auth.post("/signup", async (req, res) => {
 
-    const parsedData = userSchema.safeParse(req.body);
+    const parsedData = createUserShema.safeParse(req.body);
     if (!parsedData.success) {
         res.json({
             message: parsedData.error
