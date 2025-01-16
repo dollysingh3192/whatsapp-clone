@@ -1,5 +1,5 @@
 {
-  "name": "admin",
+  "name": "@repo/interface",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -10,16 +10,21 @@
     "lint": "eslint src/"
   },
   "dependencies": {
+    "@repo/ui": "*",
+    "axios": "^1.7.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "@repo/ui": "*"
+    "react-router-dom": "^7.1.2"
   },
   "devDependencies": {
+    "@repo/eslint-config": "*",
+    "@repo/typescript-config": "*",
     "@types/react": "^18.2.62",
     "@types/react-dom": "^18.2.19",
     "@vitejs/plugin-react": "^4.2.1",
-    "@repo/eslint-config": "*",
-    "@repo/typescript-config": "*",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.5.1",
+    "tailwindcss": "^3.4.17",
     "typescript": "5.5.4",
     "vite": "^5.1.4"
   }
