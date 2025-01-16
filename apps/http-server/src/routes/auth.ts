@@ -25,6 +25,8 @@ auth.post("/signin", async (req, res) => {
         }
     });
 
+    console.log(data);
+
     if (!data) {
         return res.status(400).json({ message: 'Invalid credentials' });
     }
@@ -43,10 +45,7 @@ auth.post("/signup", async (req, res) => {
 
     const parsedData = createUserShema.safeParse(req.body);
     if (!parsedData.success) {
-        res.json({
-            message: parsedData.error
-        })
-        return;
+        return res.status(500).json({ message: parsedData.error });;
     }
 
     const { name, email, password } = parsedData.data;
@@ -67,7 +66,7 @@ auth.post("/signup", async (req, res) => {
         res.status(201).json({ message: 'User created successfully', user });
     } catch (error) {
         console.error('Error creating user:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: 'Internal server error!!!!!!' });
     }
     
 });
