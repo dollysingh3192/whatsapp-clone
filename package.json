@@ -11,6 +11,7 @@
     "generate": "turbo run generate"
   },
   "devDependencies": {
+    "concurrently": "^9.1.2",
     "prettier": "^3.2.5",
     "turbo": "^2.3.3"
   },

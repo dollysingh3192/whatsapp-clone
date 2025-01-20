@@ -1,5 +1,5 @@
 {
-  "name": "ws-server",
+  "name": "@repo/ws-server",
   "version": "0.0.0",
   "private": true,
   "scripts": {

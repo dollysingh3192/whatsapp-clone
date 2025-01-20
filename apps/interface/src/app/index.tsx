@@ -26,6 +26,9 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 function App() {
   const [username, setUsername] = useState<string | null>(null);
 
+  // List of routes where the Navbar should be shown
+  const navbarRoutes = ['/', '/signin', '/signup'];
+
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem("token");
@@ -57,7 +60,7 @@ function App() {
   
   return (
     <BrowserRouter>
-      <Navbar username={username} /> {/* Render Navbar on all pages */}
+      {navbarRoutes.includes(location.pathname) && <Navbar username={username} />}
       <Routes>
         {/* Landing page (SignIn page) accessible to everyone */}
         <Route path="/" element={<Landing />} />
