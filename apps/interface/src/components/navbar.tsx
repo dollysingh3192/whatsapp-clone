@@ -7,7 +7,7 @@ const Navbar: React.FC<{username: string | null}> = ({username}) => {
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo */}
         <div className="text-xl font-bold">
-          <Link to="/">MyLeetcodeApp</Link>
+          <Link to="/">MyWhatsAppClone</Link>
         </div>
 
         {/* Sign In / Sign Up buttons */}
