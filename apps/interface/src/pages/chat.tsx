@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { User, Send, MessageSquare, MoreVertical } from "lucide-react";
+import { User, Send, MessageSquare, MoreVertical, Search } from "lucide-react";
 
 interface ChatPreview {
   id: string;
@@ -36,7 +36,10 @@ export const ChatList = () => {
           <User className="w-8 h-8 text-gray-600" />
           <span className="font-semibold">Chats</span>
         </div>
-        <MoreVertical className="text-gray-600" />
+        <div className="flex items-center gap-2">
+          <Search className="w-6 h-6 text-gray-600 cursor-pointer hover:text-gray-800" />
+          <MoreVertical className="text-gray-600" />
+        </div>
       </div>
       <div className="h-[calc(100vh-64px)] overflow-y-auto">
         {chats.map((chat) => (

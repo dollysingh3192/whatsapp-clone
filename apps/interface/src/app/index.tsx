@@ -1,6 +1,6 @@
 import React from "react";
 import "./styles.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { Landing, Chat } from "../pages";
 import { Navigate } from "react-router-dom";
 import { Navbar, SignIn, SignUp } from "../components";
@@ -16,7 +16,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 
   if (!token) {
     // If no token, redirect to the landing page (sign-in)
-    return <Navigate to="/" />;
+    return <Navigate to="/signup" />;
   }
 
   // If token exists, render the children (protected component)
@@ -25,50 +25,20 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 
 function App() {
   const [username, setUsername] = useState<string | null>(null);
+  const location = useLocation();
 
   // List of routes where the Navbar should be shown
   const navbarRoutes = ['/', '/signin', '/signup'];
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const token = localStorage.getItem("token");
-      if (token) {
-        try {
-          const response = await fetch(`${API_URL}/api/user/me`, {
-            method: "GET",
-            headers: {
-              authorization: `Bearer ${token}`,
-            },
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            setUsername(data.username);
-          } else {
-            // Handle token error, e.g., clear localStorage
-            localStorage.removeItem("token");
-          }
-        } catch (error) {
-          console.error("Error fetching user details:", error);
-          // Handle network or other errors
-        }
-      }
-    };
-
-    fetchUser();
-  }, []);
   
   return (
-    <BrowserRouter>
+    <div>
       {navbarRoutes.includes(location.pathname) && <Navbar username={username} />}
       <Routes>
-        {/* Landing page (SignIn page) accessible to everyone */}
-        <Route path="/" element={<Landing />} />
         <Route path="/signin" element={<SignIn onLogin={setUsername} />} />
         <Route path="/signup" element={<SignUp />} />
 
         {/* Public Routes */}
-        <Route path="/" element={<Landing />} />
+        {/* <Route path="/" element={<Landing />} /> */}
 
         {/* Protected Routes */}
         <Route
@@ -80,8 +50,15 @@ function App() {
           }
         />
       </Routes>
-    </BrowserRouter>
+    </div>
   );
 }
 
-export default App;
+// Wrap the App component with BrowserRouter to use `useLocation`
+const RootApp = () => (
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
+);
+
+export default RootApp;
