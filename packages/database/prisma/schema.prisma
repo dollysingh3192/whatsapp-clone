@@ -23,6 +23,7 @@ model User {
   // Relationships
   chatParticipants ChatParticipant[]
   messages         Message[]
+  chats Chat[]
 }
 
 model Chat {
@@ -30,11 +31,13 @@ model Chat {
   isGroup       Boolean     @default(false)
   name          String?     // Optional; used for group chats
   createdAt     DateTime    @default(now())
-  lastMessageAt DateTime?
+  createdBy     String
+  lastMessageAt DateTime  @default(now())
 
   // Relationships
   participants ChatParticipant[]
   messages     Message[]
+  user    User        @relation(fields: [createdBy], references: [id])
 }
 
 model ChatParticipant {
