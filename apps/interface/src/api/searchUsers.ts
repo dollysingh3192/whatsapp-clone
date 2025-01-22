@@ -1,13 +1,15 @@
+import { API_URL } from '../constants';
 import { SearchResult } from '../types';
+import axios from 'axios';
+
+//update below function to use axios and get call to `${API_URL}/users` 
 
 export const searchUsers = async (query: string): Promise<SearchResult[]> => {
-  // Simulating API delay
-  await new Promise(resolve => setTimeout(resolve, 500));
-  
-  // Simulated search results
-  return [
-    { id: "4", name: "Alice Johnson", email: "alice@example.com" },
-    { id: "5", name: "Bob Wilson", email: "bob@example.com" },
-    { id: "6", name: "Carol Brown", email: "carol@example.com" },
-  ].filter(user => user.name.toLowerCase().includes(query.toLowerCase()));
+  const response = await axios.get(`${API_URL}/api/v1/user/all`, {
+    params: {
+      query,
+    },
+  });
+
+  return response.data;
 };
