@@ -87,7 +87,8 @@ Command	Description
 SELECT * FROM table;	View all rows in a table.
 \q	Exit the PostgreSQL shell.
 
-
+docker exec -it f4e0721d20cecb8fadbfcce5a469f18da1aea852b495c6c28b93e1c06d0d129b /bin/sh
+psql -h localhost -U admin -d whatsapp
 
 npx prisma migrate dev
 npm run generate
