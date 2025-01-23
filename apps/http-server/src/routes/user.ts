@@ -64,7 +64,8 @@ router.get("/all", async (req, res) => {
     }
 });
 
-router.get("/chats",auth, async (req, res) => {
+router.get("/chats", auth, async (req, res) => {
+    console.log(req.userId);
     const userId = req.userId.id;
     try {
 		const conversations = await prisma.chat.findMany({
@@ -114,5 +115,50 @@ router.get("/chats",auth, async (req, res) => {
 	}
 })
    
+
+router.post("/chat", auth, async (req, res) => {
+    const currentUser = req.userId.id;
+    const { userId } = req.body;
+    try {
+
+        const existingChat = await prisma.chat.findFirst({
+            where: {
+                AND: [
+                    { participants: { some: { userId: currentUser } } },
+                    { participants: { some: { userId } } },
+                ],
+            },
+            include: {
+                participants: {
+                    select: { userId: true },
+                },
+            },
+        });
+
+        if (existingChat) {
+            return res.status(400).json({ chat: existingChat });
+        }
+
+        const newChat = await prisma.chat.create({
+            data: {
+                participants: {
+                    create: [
+                        { userId: currentUser },
+                        { userId },
+                    ],
+                },
+                createdAt: new Date(),
+                createdBy: currentUser
+            },
+        });
+
+        res.status(201).json({ chat: newChat });
+
+    } catch (error) {
+        console.error("Error creating chat:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+    
    
 export default router;
