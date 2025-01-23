@@ -136,21 +136,25 @@ router.post("/chat", auth, async (req, res) => {
         });
 
         if (existingChat) {
-            return res.status(400).json({ chat: existingChat });
+            return res.status(200).json({ chat: existingChat });
         }
 
         const newChat = await prisma.chat.create({
             data: {
                 participants: {
                     create: [
-                        { userId: currentUser },
-                        { userId },
+                        { userId: currentUser }, // Current user
+                        { userId }, // Other user
                     ],
                 },
                 createdAt: new Date(),
-                createdBy: currentUser
+                user: {
+                    connect: {
+                        id: currentUser, // Establishes the `createdBy` relationship
+                    },
+                },
             },
-        });
+        });        
 
         res.status(201).json({ chat: newChat });
 
