@@ -1,6 +1,6 @@
 import jwt, { JwtPayload, VerifyCallback, VerifyErrors } from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
-import { secret } from "../constants";
+import { secret } from "@repo/backend-common/config";
 
 // Define the type for the JWT payload
 interface DecodedToken extends JwtPayload {
