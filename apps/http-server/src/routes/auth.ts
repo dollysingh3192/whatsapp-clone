@@ -2,7 +2,7 @@ import express from "express";
 import { prisma } from '@repo/database';  // Import the Prisma singleton instance
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { secret } from "../constants";
+import { secret } from "@repo/backend-common/config";
 import { createUserShema, signinUserShema } from "@repo/common/types";
 
 const auth = express.Router();

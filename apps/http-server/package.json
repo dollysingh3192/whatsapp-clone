@@ -30,6 +30,7 @@
     "@repo/eslint-config": "*",
     "@repo/jest-presets": "*",
     "@repo/typescript-config": "*",
+    "@repo/backend-common": "*",
     "@types/bcrypt": "^5.0.2",
     "@types/body-parser": "^1.19.5",
     "@types/cors": "^2.8.17",
