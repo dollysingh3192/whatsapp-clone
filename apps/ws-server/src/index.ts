@@ -2,7 +2,7 @@ import { log } from "@repo/logger";
 import { createServer } from "./server";
 
 const port = process.env.PORT || 5002;
-const server = createServer();
+// const server = createServer();
 
 import { WebSocket, WebSocketServer } from 'ws';
 import jwt, { JwtPayload } from "jsonwebtoken";
@@ -11,13 +11,7 @@ import { prisma } from "@repo/database";
 
 const wss = new WebSocketServer({ port: 8080 });
 
-interface User {
-  ws: WebSocket,
-  rooms: string[],
-  userId: string
-}
-
-const users: User[] = [];
+const users = new Map<string, WebSocket>();
 
 function checkUser(token: string): string | null {
   try {
@@ -27,46 +21,66 @@ function checkUser(token: string): string | null {
       return null;
     }
 
-    if (!decoded || !decoded.userId) {
+    if (!decoded || !decoded.id) {
       return null;
     }
 
-    return decoded.userId;
+    return decoded.id;
   } catch (e) {
     return null;
   }
 }
 
 wss.on('connection', function connection(ws, request) {
-  const url = request.url;
-
-  if (!url) {
-    return;
-  }
-  
-  const queryParams = new URLSearchParams(url.split('?')[1]);
-  const token = queryParams.get('token') || "";
-  const userId = checkUser(token);
-
-  if (userId == null) {
-    ws.close()
-    return null;
-  }
-
-  users.push({
-    userId,
-    rooms: [],
-    ws
-  })
-
-  ws.on('message', async function message(data) {
+  let userId = null;
+  ws.on('message', async function message(message) {
     
-
+    const data = JSON.parse(message.toString());
+    
+    switch (data.type) {
+      case 'auth':
+        userId = checkUser(data.token);
+        if (userId == null) {
+          ws.close()
+          return null;
+        }
+        users.set(userId, ws);
+        break;
+        
+      case 'new_chat':
+        const targetWs = users.get(data.targetUserId);
+        if (targetWs) {
+          targetWs.send(JSON.stringify({
+            type: 'chat_request',
+            from: {
+              id: data.userId,
+              name: data.name
+            }
+          }));
+        }
+        break;
+        
+      case 'message':
+        const recipientWs = users.get(data.recipientId);
+        if (recipientWs) {
+          recipientWs.send(JSON.stringify({
+            type: 'new_message',
+            message: data.message,
+            chatId: data.chatId,
+            senderId: userId,
+            timestamp: new Date().toISOString()
+          }));
+        }
+        break;
+    }
+        
 
   });
 
+  ws.send("connected confirmation");
+
 });
 
-server.listen(port, () => {
-  log(`api running on ${port}`);
-});
+// server.listen(port, () => {
+//   log(`api running on ${port}`);
+// });
