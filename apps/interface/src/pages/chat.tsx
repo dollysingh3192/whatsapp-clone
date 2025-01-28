@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { ChatList } from "../components/chatlist";
 import { ChatView } from "../components/chatview";
+import { Settings } from "../components/settings";
 import { useSocket } from "../hooks/useSocket";
 
 export default function Chat({ username }: { username: string | null }) {
@@ -18,6 +19,9 @@ export default function Chat({ username }: { username: string | null }) {
 
   return (
     <div className="flex h-screen">
+      <div style={{ width: 64 }} className='flex h-100 px-3 border-r'>
+        <Settings />
+      </div>
       <div className="w-1/3 min-w-[320px]">
         <ChatList onChatSelect={setSelectedChatId} ws={socket} username={username} />
       </div>

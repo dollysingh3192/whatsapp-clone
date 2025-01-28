@@ -18,8 +18,9 @@ router.get("/me", auth, async (req, res) => {
         return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    res.send({
-        name: user.name
+    return res.send({
+        name: user.name,
+        email: user.email,
     })
 })
 
@@ -120,7 +121,6 @@ router.post("/chat", auth, async (req, res) => {
     const currentUser = req.userId.id;
     const { userId } = req.body;
     try {
-
         const existingChat = await prisma.chat.findFirst({
             where: {
                 AND: [
