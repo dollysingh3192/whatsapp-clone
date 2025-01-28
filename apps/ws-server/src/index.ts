@@ -33,6 +33,7 @@ function checkUser(token: string): string | null {
 
 wss.on('connection', function connection(ws, request) {
   let userId = null;
+
   ws.on('message', async function message(message) {
     
     const data = JSON.parse(message.toString());
@@ -53,31 +54,35 @@ wss.on('connection', function connection(ws, request) {
           targetWs.send(JSON.stringify({
             type: 'chat_request',
             from: {
-              id: data.userId,
+              id: userId,
               name: data.name
             }
           }));
         }
         break;
         
-      case 'message':
-        const recipientWs = users.get(data.recipientId);
-        if (recipientWs) {
-          recipientWs.send(JSON.stringify({
-            type: 'new_message',
-            message: data.message,
-            chatId: data.chatId,
-            senderId: userId,
-            timestamp: new Date().toISOString()
-          }));
-        }
-        break;
+      // case 'message':
+      //   const recipientWs = users.get(data.recipientId);
+      //   if (recipientWs) {
+      //     recipientWs.send(JSON.stringify({
+      //       type: 'new_message',
+      //       message: data.message,
+      //       chatId: data.chatId,
+      //       senderId: userId,
+      //       timestamp: new Date().toISOString()
+      //     }));
+      //   }
+      //   break;
     }
         
 
   });
 
-  ws.send("connected confirmation");
+  ws.on('close', () => {
+    if (userId) {
+      users.delete(userId);
+    }
+  });
 
 });
 

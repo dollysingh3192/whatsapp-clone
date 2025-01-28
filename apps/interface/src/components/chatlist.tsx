@@ -5,9 +5,11 @@ import { ChatPreview, SearchResult } from "../types";
 
 interface ChatListProps {
   onChatSelect: (chatId: string) => void;
+  ws: WebSocket | null;
+  username: string | null;
 }
 
-export const ChatList: React.FC<ChatListProps> = ({ onChatSelect }) => {
+export const ChatList: React.FC<ChatListProps> = ({ onChatSelect, ws, username }) => {
   const [chats, setChats] = useState<ChatPreview[]>([
     {
       id: "1",
@@ -35,8 +37,44 @@ export const ChatList: React.FC<ChatListProps> = ({ onChatSelect }) => {
   const [selectedChatId, setSelectedChatId] = useState<string>("");
 
   useEffect(() => {
+    if (ws) {
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        
+        switch (data.type) {
+          case 'chat_request':
+            // Add new chat to the list when someone wants to chat
+            const newChat: ChatPreview = {
+              id: data.from.id,
+              name: data.from.name,
+              lastMessage: "",
+              time: "Just now",
+            };
+            setChats(prev => [newChat, ...prev]);
+            break;
+            
+          case 'new_message':
+            setChats(prev => prev.map(chat => 
+              chat.id === data.chatId 
+                ? {
+                    ...chat,
+                    lastMessage: data.message,
+                    time: new Date(data.timestamp).toLocaleTimeString([], { 
+                      hour: '2-digit', 
+                      minute: '2-digit' 
+                    })
+                  }
+                : chat
+            ));
+            break;
+        }
+      };
+    }
+  }, [ws]);
+
+  useEffect(() => {
     const search = async () => {
-      if (searchQuery.length >= 2) {
+      if (searchQuery.length >= 1) {
         const results = await searchUsers(searchQuery);
         setSearchResults(results);
         setShowDropdown(true);
@@ -57,6 +95,13 @@ export const ChatList: React.FC<ChatListProps> = ({ onChatSelect }) => {
       lastMessage: "Start a conversation",
       time: "Just now",
     };
+
+    // Send WebSocket message to notify the other user
+    ws?.send(JSON.stringify({
+      type: 'new_chat',
+      targetUserId: result.id,
+      name: "dolly" // Replace with actual user name
+    }));
 
     setChats(prev => [newChat, ...prev]);
     setShowDropdown(false);

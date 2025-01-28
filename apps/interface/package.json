@@ -10,14 +10,19 @@
     "lint": "eslint src/"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.5.1",
     "@repo/ui": "*",
     "axios": "^1.7.9",
+    "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.473.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^7.1.2"
+    "react-redux": "^9.2.0",
+    "react-router-dom": "^7.1.2",
+    "redux": "^5.0.1"
   },
   "devDependencies": {
+    "@repo/backend-common": "*",
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
     "@types/react": "^18.2.62",
