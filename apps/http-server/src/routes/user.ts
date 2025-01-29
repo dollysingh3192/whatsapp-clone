@@ -19,6 +19,7 @@ router.get("/me", auth, async (req, res) => {
     }
 
     return res.send({
+        id: user.id,
         name: user.name,
         email: user.email,
     })

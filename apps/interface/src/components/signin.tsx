@@ -6,7 +6,7 @@ interface SignInProps {
   onLogin: (username: string) => void;
 }
 
-const SignIn: React.FC<SignInProps> = ({ onLogin }) => {
+const SignIn: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -25,8 +25,7 @@ const SignIn: React.FC<SignInProps> = ({ onLogin }) => {
       const data = await response.json();
       if (response.ok) {
         localStorage.setItem('token', data.token); // Store JWT token in localStorage
-        onLogin(data?.user?.username); // Update the username in the Navbar component
-        navigate('/chat'); 
+        navigate('/'); 
       } else {
         alert('Invalid credentials');
       }

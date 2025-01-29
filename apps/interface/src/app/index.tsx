@@ -1,11 +1,10 @@
 import React from "react";
 import "./styles.css";
-import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation, useNavigate, useMatch } from "react-router-dom";
 import { Landing, Chat } from "../pages";
 import { Navigate } from "react-router-dom";
 import { Navbar, SignIn, SignUp } from "../components";
-import { useEffect, useState } from "react";
-import { API_URL } from "../constants";
+
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -16,36 +15,36 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 
   if (!token) {
     // If no token, redirect to the landing page (sign-in)
-    return <Navigate to="/signup" />;
+    return <Navigate to="/signin" />;
   }
 
   // If token exists, render the children (protected component)
   return <>{children}</>;
 };
 
+
 function App() {
-  const [username, setUsername] = useState<string | null>(null);
   const location = useLocation();
 
   // List of routes where the Navbar should be shown
-  const navbarRoutes = ['/', '/signin', '/signup'];
+  const navbarRoutes = ['/','/signin', '/signup'];
   
   return (
-    <div>
-      {navbarRoutes.includes(location.pathname) && <Navbar username={username} />}
+    <div className="flex flex-col h-screen">
+      {navbarRoutes.some(route => location.pathname === route) && <Navbar />}
       <Routes>
-        <Route path="/signin" element={<SignIn onLogin={setUsername} />} />
+        <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
 
         {/* Public Routes */}
-        {/* <Route path="/" element={<Landing />} /> */}
+        {/* <Route path="/" element={<ProtectedRoute><Landing /></ProtectedRoute>} /> */}
 
         {/* Protected Routes */}
         <Route
-          path="/chat"
+          path="/"
           element={
             <ProtectedRoute>
-              <Chat username={username} />
+              <Chat />
             </ProtectedRoute>
           }
         />

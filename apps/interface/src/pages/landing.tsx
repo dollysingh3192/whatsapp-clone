@@ -10,7 +10,7 @@ const Landing = () => {
       <p className="text-lg mb-8">Welcome to Whatsapp Clone! Start chatting with your friends and family.</p>
       
       <div className="space-y-4">
-        <Link to="/signup">
+        <Link to="/chat">
           <button className="bg-green-500 text-white px-6 py-3 rounded-lg text-lg hover:bg-green-600 transition duration-300">
             Get Started
           </button>

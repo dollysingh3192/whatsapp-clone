@@ -1,7 +1,12 @@
-interface InitialState {
-    value: number;
-  }
-  const UpdateCounterAction: string = "Counter";
-  
-  export default InitialState;
-  export { UpdateCounterAction };
+export interface UserDetails {
+  id: string;
+  name: string;
+  email: string;
+}
+export interface InitialState {
+  data: null | UserDetails;
+}
+
+const UserAction: string = "User";
+
+export { UserAction,  };
