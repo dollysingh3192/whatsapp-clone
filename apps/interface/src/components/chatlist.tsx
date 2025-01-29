@@ -113,7 +113,7 @@ export const ChatList: React.FC<ChatListProps> = ({ onChatSelect, ws }) => {
   };
 
   return (
-    <div className="h-screen border-r relative">
+    <div className="h-full border-r relative">
       <div className="p-4 border-b flex flex-col gap-4 bg-white">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -149,7 +149,7 @@ export const ChatList: React.FC<ChatListProps> = ({ onChatSelect, ws }) => {
           )}
         </div>
       </div>
-      <div className="h-[calc(100vh-136px)] overflow-y-auto">
+      <div className="h-[calc(100vh-196px)] overflow-y-auto">
         {chats.map((chat) => (
           <div
             key={chat.id}

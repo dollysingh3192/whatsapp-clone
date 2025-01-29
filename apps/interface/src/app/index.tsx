@@ -30,18 +30,18 @@ function App() {
   const navbarRoutes = ['/','/signin', '/signup'];
   
   return (
-    <div>
+    <div className="flex flex-col h-screen">
       {navbarRoutes.some(route => location.pathname === route) && <Navbar />}
       <Routes>
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
 
         {/* Public Routes */}
-        <Route path="/" element={<ProtectedRoute><Landing /></ProtectedRoute>} />
+        {/* <Route path="/" element={<ProtectedRoute><Landing /></ProtectedRoute>} /> */}
 
         {/* Protected Routes */}
         <Route
-          path="/chat"
+          path="/"
           element={
             <ProtectedRoute>
               <Chat />

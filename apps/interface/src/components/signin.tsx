@@ -25,7 +25,7 @@ const SignIn: React.FC = () => {
       const data = await response.json();
       if (response.ok) {
         localStorage.setItem('token', data.token); // Store JWT token in localStorage
-        navigate('/chat'); 
+        navigate('/'); 
       } else {
         alert('Invalid credentials');
       }

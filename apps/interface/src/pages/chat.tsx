@@ -55,10 +55,10 @@ export default function Chat() {
   }
 
   return (
-    <div className="flex h-screen">
-      <div style={{ width: 64 }} className='flex h-100 px-3 border-r'>
+    <div className="flex h-full ">
+      {/* <div style={{ width: 64 }} className='flex h-100 px-3 border-r'>
         <Settings />
-      </div>
+      </div> */}
       <div className="w-1/3 min-w-[320px]">
         <ChatList onChatSelect={setSelectedChatId} ws={socket} />
       </div>
