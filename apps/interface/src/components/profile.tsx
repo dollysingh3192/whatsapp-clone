@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { API_URL } from '../constants';
 import { headers } from '../utils';
+import { RootState } from '../store';
+import { useSelector } from 'react-redux';
 
 const Avatar: React.FC<{ name: string }> = ({ name }) => {
 
@@ -15,32 +17,8 @@ const Avatar: React.FC<{ name: string }> = ({ name }) => {
   return <span>{initials.toUpperCase()}</span>
 }
 
-type UserData = {
-  name: string;
-  email: string;
-}
-
 const Profile = () => {
-  const [userData, setUserData] = useState<UserData|null>(null);
-
-  useEffect(() => {
-    (async function () {
-      try {
-        const response = await fetch(`${API_URL}/api/v1/user//me`, {
-          method: 'GET',
-          headers: headers(),
-        });
-  
-        const data = await response.json();
-
-        if (response.ok) {
-          setUserData(data)
-        }
-      } catch (error) {
-        console.error('Error fetching user details:', error);
-      }
-    })();
-  }, []);
+  const userData = useSelector((state: RootState) => state.user.data);
 
   if (!userData) return null;
 

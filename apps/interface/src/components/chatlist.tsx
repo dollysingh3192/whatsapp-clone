@@ -6,10 +6,9 @@ import { ChatPreview, SearchResult } from "../types";
 interface ChatListProps {
   onChatSelect: (chatId: string) => void;
   ws: WebSocket | null;
-  username: string | null;
 }
 
-export const ChatList: React.FC<ChatListProps> = ({ onChatSelect, ws, username }) => {
+export const ChatList: React.FC<ChatListProps> = ({ onChatSelect, ws }) => {
   const [chats, setChats] = useState<ChatPreview[]>([
     {
       id: "1",

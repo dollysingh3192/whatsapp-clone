@@ -72,7 +72,7 @@ const SignUp: React.FC = () => {
           <p className="mb-4">Account created successfully!</p>
           <p>
             <a
-              href="#"
+              href=""
               className="text-blue-500 underline"
               onClick={() => navigate('/signIn')}
             >
