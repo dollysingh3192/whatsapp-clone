@@ -27,7 +27,12 @@ export function useSocket() {
             setSocket(ws);
         };
 
-    }, []); 
+        return () => {
+            if (ws) {
+                ws.close();
+            }
+        };
+    }, []);
 
     return {
         socket,

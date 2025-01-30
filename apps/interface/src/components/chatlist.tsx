@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { User, MessageSquare, MoreVertical, Search } from "lucide-react";
 import { searchUsers } from "../api/searchUsers";
 import { ChatPreview, SearchResult } from "../types";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
+import { createChat } from "../api/createChat";
 
 interface ChatListProps {
   onChatSelect: (chatId: string) => void;
@@ -34,6 +37,7 @@ export const ChatList: React.FC<ChatListProps> = ({ onChatSelect, ws }) => {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedChatId, setSelectedChatId] = useState<string>("");
+  const userData = useSelector((state: RootState) => state.user.data);
 
   useEffect(() => {
     if (ws) {
@@ -87,24 +91,35 @@ export const ChatList: React.FC<ChatListProps> = ({ onChatSelect, ws }) => {
     return () => clearTimeout(debounce);
   }, [searchQuery]);
 
-  const addNewChat = (result: SearchResult) => {
-    const newChat: ChatPreview = {
-      id: result.id,
-      name: result.name,
-      lastMessage: "Start a conversation",
-      time: "Just now",
-    };
+  const addNewChat = async (result: SearchResult) => {
+    try {
+      // First, create the chat in the database
+      const chatResponse = await createChat(result.id);
+      
+      const newChat: ChatPreview = {
+        id: result.id,
+        name: result.name,
+        lastMessage: "Start a conversation",
+        time: "Just now",
+      };
 
-    // Send WebSocket message to notify the other user
+      // Send WebSocket message to notify the other user
     ws?.send(JSON.stringify({
       type: 'new_chat',
       targetUserId: result.id,
-      name: "dolly" // Replace with actual user name
+      name: userData?.name,
+      chatId: chatResponse.id // Include the chat ID from the database
     }));
 
-    setChats(prev => [newChat, ...prev]);
-    setShowDropdown(false);
-    setSearchQuery("");
+      setChats(prev => [newChat, ...prev]);
+      setShowDropdown(false);
+      setSearchQuery("");
+      
+    } catch (error) {
+      console.error("Error creating chat:", error);
+      // You might want to show an error message to the user
+      alert("Failed to create chat. Please try again.");
+    }
   };
 
   const handleChatSelect = (chatId: string) => {
