@@ -74,7 +74,7 @@ const SignUp: React.FC = () => {
             <a
               href=""
               className="text-blue-500 underline"
-              onClick={() => navigate('/signIn')}
+              onClick={() => navigate('/signin')}
             >
               Click here to sign in
             </a>

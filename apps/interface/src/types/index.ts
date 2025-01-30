@@ -17,3 +17,14 @@ export interface ChatPreview {
     time: string;
     sender: string;
   }
+
+  export interface Chat {
+    id: string;
+    participants: { userId: string }[];
+    createdAt: string;
+    createdBy: string
+    lastMessageAt: string;
+    name: string;
+    isGroup: boolean;
+    // Add other fields as needed
+  }
