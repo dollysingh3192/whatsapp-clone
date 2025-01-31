@@ -109,7 +109,7 @@ router.get("/chats", auth, async (req, res) => {
 			},
 		});
 		res.send({
-            conversations
+            data: conversations
         });
 	} catch (error) {
 		console.log(error, "CONVERSATIONS_FETCH_ERROR");
