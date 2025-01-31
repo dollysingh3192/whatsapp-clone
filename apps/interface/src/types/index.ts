@@ -1,3 +1,4 @@
+import { User } from 'lucide-react';
 export interface ChatPreview {
     id: string;
     name: string;
@@ -18,9 +19,15 @@ export interface ChatPreview {
     sender: string;
   }
 
+  export interface User {
+    id: string;
+    name: string;
+    email: string;
+  }
+
   export interface Chat {
     id: string;
-    participants: { userId: string }[];
+    participants: { userId: string, user: User }[];
     createdAt: string;
     createdBy: string
     lastMessageAt: string;
