@@ -75,8 +75,8 @@ router.get("/chats", auth, async (req, res) => {
 				lastMessageAt: "desc",
 			},
 			where: {
-				createdBy: userId,
-			},
+                 participants: { some: { userId } } ,
+            },
 			include: {
 				participants : {
                     include: {
