@@ -60,6 +60,7 @@ export const ChatList: React.FC<ChatListProps> = ({ onChatSelect, ws }) => {
           time: new Date(chat.lastMessageAt).toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit",
+            hour12: true,
           }),
         }));
 
