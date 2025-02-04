@@ -27,5 +27,6 @@ export const chatParticipantSchema = z.object({
 export const messageSchema = z.object({
   chatId: z.string().uuid(),
   senderId: z.string().uuid(), 
-  content: z.string().min(1, "Message content is required")
+  content: z.string().min(1, "Message content is required"),
+  createdAt: z.date().optional()
 });

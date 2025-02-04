@@ -25,7 +25,8 @@ export const getMessages = async (chatId: string, currentUserId: string | undefi
     text: msg.content,
     time: new Date(msg.sentAt).toLocaleTimeString([], { 
       hour: '2-digit', 
-      minute: '2-digit' 
+      minute: '2-digit',
+      hour12: true
     }),
     sender: msg.senderId === currentUserId ? 'me' : 'them'
   }));

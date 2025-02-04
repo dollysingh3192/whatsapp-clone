@@ -57,18 +57,23 @@ router.post('/', auth, async (req, res) => {
 //get route to get all messages in a chat
 router.get('/:chatId', auth, async (req, res) => {
     const { chatId } = req.params;
-    const senderId = req.userId.id;
 
     try {
         const messages = await prisma.message.findMany({
             where: {
-                chatId,
-                senderId
+                chatId
             },
             orderBy: {
                 sentAt: 'desc'
             }
         });
+
+        messages.sort((a, b) => {
+			if (a.createdAt && b.createdAt) {
+				return a.createdAt.getTime() - b.createdAt.getTime();
+			}
+			return 0;
+		});
 
         res.status(200).json(messages);
     } catch (error) {

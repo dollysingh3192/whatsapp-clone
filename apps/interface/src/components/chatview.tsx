@@ -23,26 +23,27 @@ export const ChatView: React.FC<ChatViewProps> = ({ chatId, ws }) => {
     status: "",
   });
 
-  // useEffect(() => {
-  //   if (ws) {
-  //     ws.onmessage = (event) => {
-  //       const data = JSON.parse(event.data);
+  useEffect(() => {
+    if (ws) {
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
 
-  //       if (data.type === 'new_message' && data.chatId === chatId) {
-  //         const message: Message = {
-  //           id: Date.now().toString(),
-  //           text: data.message,
-  //           time: new Date(data.timestamp).toLocaleTimeString([], {
-  //             hour: '2-digit',
-  //             minute: '2-digit'
-  //           }),
-  //           sender: 'them'
-  //         };
-  //         setMessages(prev => [...prev, message]);
-  //       }
-  //     };
-  //   }
-  // }, [ws, chatId]);
+        if (data.type === 'new_message' && data.chatId === chatId) {
+          const message: Message = {
+            id: Date.now().toString(),
+            text: data.message,
+            time: new Date(data.timestamp).toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: true
+            }),
+            sender: 'them'
+          };
+          setMessages(prev => [...prev, message]);
+        }
+      };
+    }
+  }, [ws, chatId]);
 
   // Load messages when chat is selected
   useEffect(() => {
