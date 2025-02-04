@@ -61,18 +61,30 @@ wss.on('connection', function connection(ws, request) {
         }
         break;
         
-      // case 'message':
-      //   const recipientWs = users.get(data.recipientId);
-      //   if (recipientWs) {
-      //     recipientWs.send(JSON.stringify({
-      //       type: 'new_message',
-      //       message: data.message,
-      //       chatId: data.chatId,
-      //       senderId: userId,
-      //       timestamp: new Date().toISOString()
-      //     }));
-      //   }
-      //   break;
+      case 'message':
+        const chatParticipants = await prisma.chatParticipant.findMany({
+          where: {
+            chatId: data.chatId  
+          },
+          include: {
+            user: true
+          }
+        });
+        chatParticipants.forEach(participant => {
+          if (participant.userId !== userId) { // Ensure we do not send to the sender
+            const recipientWs = users.get(participant.userId);
+            if (recipientWs) {
+              recipientWs.send(JSON.stringify({
+                type: 'new_message',
+                message: data.message,
+                chatId: data.chatId,
+                senderId: userId,
+                timestamp: new Date().toISOString()
+              }));
+            }
+          }
+        });
+        break;
     }
         
 

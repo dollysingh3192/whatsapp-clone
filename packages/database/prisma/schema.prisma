@@ -56,9 +56,10 @@ model Message {
   chatId      String
   senderId    String
   content     String
-  sentAt      DateTime @default(now())
+  sentAt      DateTime?
   deliveredAt DateTime?
   seenAt      DateTime?
+  createdAt DateTime @default(now())
 
   // Relationships
   chat  Chat @relation(fields: [chatId], references: [id])
