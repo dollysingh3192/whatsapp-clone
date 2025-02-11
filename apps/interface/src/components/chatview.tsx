@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { User, Send } from "lucide-react";
 import { Message } from "../types";
 import { RootState } from "../store";
@@ -12,6 +12,7 @@ interface ChatViewProps {
 }
 
 export const ChatView: React.FC<ChatViewProps> = ({ chatId, ws }) => {
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
@@ -65,6 +66,14 @@ export const ChatView: React.FC<ChatViewProps> = ({ chatId, ws }) => {
 
     loadMessages();
   }, [chatId]);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   // useEffect(() => {
   //   const loadChat = async () => {
@@ -195,6 +204,7 @@ export const ChatView: React.FC<ChatViewProps> = ({ chatId, ws }) => {
                 </div>
               </div>
             ))}
+            <div ref={messagesEndRef} />
           </div>
         )}
       </div>

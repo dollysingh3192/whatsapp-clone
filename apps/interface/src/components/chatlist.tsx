@@ -94,22 +94,23 @@ export const ChatList: React.FC<ChatListProps> = ({ onChatSelect, ws }) => {
             setChats((prev) => [newChat, ...prev]);
             break;
 
-          // case "new_message":
-          //   setChats((prev) =>
-          //     prev.map((chat) =>
-          //       chat.id === data.chatId
-          //         ? {
-          //             ...chat,
-          //             lastMessage: data.message,
-          //             time: new Date(data.timestamp).toLocaleTimeString([], {
-          //               hour: "2-digit",
-          //               minute: "2-digit",
-          //             }),
-          //           }
-          //         : chat
-          //     )
-          //   );
-          //   break;
+          case "new_message":
+            setChats((prev) =>
+              prev.map((chat) =>
+                chat.id === data.chatId
+                  ? {
+                      ...chat,
+                      //lastMessage: data.message,
+                      time: new Date(data.timestamp).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true,
+                      }),
+                    }
+                  : chat
+              )
+            );
+            break;
         }
       };
     }
