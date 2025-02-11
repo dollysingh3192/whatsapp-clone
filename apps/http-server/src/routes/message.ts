@@ -32,7 +32,8 @@ router.post('/', auth, async (req, res) => {
                     }
                 },
                 content,
-                sentAt
+                sentAt,
+                deliveredAt: new Date() // when the message is successfully stored in the database and broadcasted to the recipient(s). It ensures consistency
             }
         });
 
